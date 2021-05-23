@@ -5,7 +5,7 @@ var state ={
 
 module.exports.connect=function(done){
     const url = "mongodb://localhost:27017"
-    const dbname="shoppingcart"
+    const dbname="shopping-cart"
 
     MongoClient.connect(url,function(err,data){
         if (err) return done(err)
