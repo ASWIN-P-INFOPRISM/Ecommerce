@@ -15,19 +15,27 @@ module.exports={
     },
     ofLogin :(details)=>{
         return new Promise(async(resolve,reject)=>{
+            let response = {}
             let user= await db.get().collection(collection.USER_DATA).findOne({email : details.email})
             if(user){
                 bcrypt.compare(details.password,user.password).then((status)=>{
                     if(status){
-                        console.log('LOGINED');
+                        console.log('LOGINED ');
+                        console.log( status);
+                        response.user=user;
+                        response.loginStatus=true
+                        resolve(response)
                     }
                     else{
                         console.log('LOGIN UNSUCCESSFULL');
+                        console.log( status);
+                        resolve(response.loginStatus=false)
                     }
                 })
             }
             else{
-                console.log('LOGIN UNSUCCESSFULL');
+                console.log('LOGIN UNSUCCESSFULL' + user);
+                resolve(response.loginStatus=false)
             }
         })
 

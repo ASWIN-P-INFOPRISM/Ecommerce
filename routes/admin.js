@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/add-product',(req,res)=>{
 
-  res.render('admin/add-product')
+  res.render('admin/add-product',{admin : true})
 });
 
 router.post('/add-product',(req,res)=>{

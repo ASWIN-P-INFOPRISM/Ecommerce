@@ -14,7 +14,7 @@ module.exports={
 
            let products = await db.get().collection(collection.PRODUCT).find().toArray()
            resolve(products)
-
+ 
         })
             
         }
