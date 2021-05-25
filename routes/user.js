@@ -32,7 +32,16 @@ router.post('/signup', (req, res) => {
 
 
 router.get('/login', (req, res) => {
-  res.render('user/login');
+  if(req.session.loginStatus){
+    res.redirect('/')
+  }
+  else{
+    let loginError = req.session.loginError
+    res.render('user/login',{ loginError});
+    req.session.loginError=false
+    
+  }
+
 });
 
 
@@ -40,10 +49,13 @@ router.post('/login', (req, res) => {
 
   accountHelpers.ofLogin(req.body).then((response) => {
     if (response) {
+      req.session.loginStatus= true
       req.session.user = response.user
       res.redirect('/')
     }
     else{
+      req.session.loginStatus= false 
+      req.session.loginError= "*Invalid Username or Password"
       res.redirect('/login')
     }
   })
@@ -54,7 +66,7 @@ router.get('/logout',(req,res)=>{
   req.session.destroy()
   res.redirect('/')
 });
-
+ 
 
 
 module.exports = router;

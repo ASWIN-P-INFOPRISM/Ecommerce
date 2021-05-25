@@ -1,5 +1,8 @@
 <div class="col-md-6 col-12 m-auto pt-5">
     <h2 align="center">Login</h2><br><br>
+    {{#if loginError}}
+    <p class="error" style="color: red;">{{loginError}}</p>
+    {{/if}}
     <form action="/login" method="post">
     <div class="mb-3 row">
         <label for="" class="col-sm-2 col-form-label">Email</label>
