@@ -3,7 +3,18 @@ var router = express.Router();
 var productHelpers = require('../helpers/product-helpers')
 var accountHelpers = require('../helpers/account-helpers');
 const { response } = require('express');
+
+const checkLogin= (req,res,next)=>{
+  if(req.session.loginStatus){
+    next()
+  }
+  else{
+    res.redirect('/login')
+  }
+}
+
 /* GET users listing. */
+
 router.get('/', function (req, res, next) {
 
   let user = req.session.user
@@ -66,7 +77,14 @@ router.get('/logout',(req,res)=>{
   req.session.destroy()
   res.redirect('/')
 });
+
+
+
+router.get('/cart',checkLogin,(req,res)=>{
+  let user = req.session.user
+    res.render('user/cart',{user});
+})
  
 
 
-module.exports = router;
+module.exports = router; 

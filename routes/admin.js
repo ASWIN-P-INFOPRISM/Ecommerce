@@ -1,3 +1,4 @@
+const { response } = require('express');
 var express = require('express');
 
 var router = express.Router();
@@ -25,11 +26,18 @@ router.post('/add-product',(req,res)=>{
   productHelpers.productHelp(req.body,(id)=>{
     let img= req.files.Image
     img.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
-      if (!err){   res.render('admin/add-product');}
+      if (!err){   res.redirect('/admin/add-product');}
       else {console.log(err);}
     })
    
   })
 });
+
+router.get('/delete/:id',(req,res)=>{
+   let productId = req.params.id
+   productHelpers.toDelete(productId).then((response)=>{
+     res.redirect('/admin')
+   })
+})
 
 module.exports = router;

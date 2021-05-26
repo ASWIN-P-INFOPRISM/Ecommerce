@@ -1,5 +1,7 @@
 var db = require('../config/connection')
+const objectId = require('mongodb').ObjectId
 var collection=require('../config/collection-names')
+const { response } = require('express')
 
 module.exports={
     productHelp : (product,callback)=>{
@@ -17,5 +19,15 @@ module.exports={
  
         })
             
+        },
+
+        toDelete : (productId)=>{
+            return new Promise((resolve,reject)=>{
+                let Id = objectId(productId)
+                db.get().collection(collection.PRODUCT).removeOne({_id:Id}).then((response)=>{
+                    console.log(response);
+                    resolve(response)
+                })
+            })
         }
     }
