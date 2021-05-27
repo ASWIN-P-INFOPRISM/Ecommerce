@@ -7,7 +7,6 @@ var productHelpers= require('../helpers/product-helpers')
 router.get('/', function (req, res, next) {
 
   productHelpers.productDisplay().then((products)=>{
-    console.log(products)
     res.render('admin/view-product', { title: 'E-Commerce', products, admin : true });
   });
   
@@ -25,10 +24,8 @@ router.post('/add-product',(req,res)=>{
   console.log(req.body)
   productHelpers.productHelp(req.body,(id)=>{
     let img= req.files.Image
-    img.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
-      if (!err){   res.redirect('/admin/add-product');}
-      else {console.log(err);}
-    })
+    img.mv('./public/product-images/'+id+'.jpg')
+      res.redirect('/admin/add-product');
    
   })
 });
@@ -38,6 +35,24 @@ router.get('/delete/:id',(req,res)=>{
    productHelpers.toDelete(productId).then((response)=>{
      res.redirect('/admin')
    })
+});
+
+router.get('/edit/:id',(req,res)=>{
+  productHelpers.getoneProduct(req.params.id).then((product)=>{
+    res.render('admin/edit-product',{product,admin : true})
+  })
+});
+
+router.post('/edit/:id',(req,res)=>{
+  productHelpers.editProduct(req.params.id,req.body).then(()=>{
+    res.redirect('/admin')
+    if(req.files.Image){
+      let img= req.files.Image
+      console.log(true);
+    img.mv('./public/product-images/'+req.params.id+'.jpg')
+    }
+    
+  })
 })
 
 module.exports = router;

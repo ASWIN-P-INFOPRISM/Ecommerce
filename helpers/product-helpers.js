@@ -29,5 +29,30 @@ module.exports={
                     resolve(response)
                 })
             })
+        },
+
+        getoneProduct : (id)=>{
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.PRODUCT).findOne({_id : objectId(id)}).then((product)=>{
+                    resolve(product)
+            })
+            
+            })
+        },
+
+        editProduct : (id,content)=>{
+                return new Promise((resolve,reject)=>{
+                 db.get().collection(collection.PRODUCT).updateOne({_id : objectId(id)},{
+                    $set : {
+                        category : content.category,
+                        name : content.name,
+                        price : content.price,
+                        description : content.description
+                    }
+                }).then((response)=>{
+                    resolve()
+                })
+
+            })
         }
     }

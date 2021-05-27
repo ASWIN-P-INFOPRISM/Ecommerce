@@ -1,5 +1,8 @@
 <section>
     <div class="container">
+        <div class="row mt-4">
+            <h1 align="center">Add Product</h1>
+        </div>
         <div class="row mt-5">
             <form action="/admin/add-product" method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
@@ -10,7 +13,7 @@
                     <input type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="Name">
 
                     <label for="exampleFormControlInput1" class="form-label">Price</label>
-                    <input type="text" name="price" class="form-control" id="exampleFormControlInput1" placeholder="Rs.">
+                    <input type="number" name="price" class="form-control" id="exampleFormControlInput1" placeholder="Rs.">
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Description</label>
