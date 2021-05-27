@@ -1,4 +1,5 @@
 var db = require('../config/connection')
+const objectId = require('mongodb').ObjectId
 var collection=require('../config/collection-names')
 const bcrypt = require('bcrypt')
 
@@ -34,10 +35,35 @@ module.exports={
                 })
             }
             else{
-                console.log('LOGIN UNSUCCESSFULL' + user);
+                console.log('LOGIN UNSUCCESSFULL');
                 resolve(response.loginStatus=false)
             }
         })
 
+    },
+
+    addtoCart : (productId,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+
+        let cart=await db.get().collection(collection.CART_USER).findOne({user : objectId(userId)})
+            if (cart){
+                db.get().collection(collection.CART_USER).updateOne({user : objectId(userId)},{
+                    $push : {
+                        products : objectId(productId)
+                    } 
+                }).then((response)=>{
+                    resolve(response)
+                })
+            }
+            else{
+               let userCart = {
+                    user : objectId(userId),
+                    products : [objectId(productId)]
+                }
+                db.get().collection(collection.CART_USER).insertOne(userCart).then((response)=>{
+                    resolve(response)
+                })
+            }
+        })
     }
 }

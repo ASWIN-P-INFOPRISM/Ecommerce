@@ -18,7 +18,6 @@ const checkLogin= (req,res,next)=>{
 router.get('/', function (req, res, next) {
 
   let user = req.session.user
-  console.log(user);
 
   productHelpers.productDisplay().then((products) => {
     res.render('user/view-product', { title: 'E-Commerce', products,user });
@@ -80,11 +79,13 @@ router.get('/logout',(req,res)=>{
 
 
 
-router.get('/cart',checkLogin,(req,res)=>{
+router.get('/cart/:id',checkLogin,(req,res)=>{
   let user = req.session.user
-    res.render('user/cart',{user});
+  accountHelpers.addtoCart(req.params.id,user._id).then((response)=>{
+    res.redirect('/')
+  })
 })
  
 
 
-module.exports = router; 
+module.exports = router;
