@@ -79,11 +79,17 @@ router.get('/logout',(req,res)=>{
 
 
 
-router.get('/cart/:id',checkLogin,(req,res)=>{
+router.get('/add-to-cart/:id',checkLogin,(req,res)=>{
   let user = req.session.user
   accountHelpers.addtoCart(req.params.id,user._id).then((response)=>{
     res.redirect('/')
   })
+});
+
+router.get('/cart',checkLogin,async(req,res)=>{
+     let products = await accountHelpers.getCart(req.session.user._id)
+     console.log(products);
+     res.render('user/cart')
 })
  
 
