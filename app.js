@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
-app.use(session({secret:'myweb', cookie :{maxAge : 120000}}));
+app.use(session({secret:'myweb', cookie :{maxAge : 1200000}}));
 db.connect((err)=>{
   if(err) console.log('Error occured'+ err)
 

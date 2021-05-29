@@ -15,12 +15,15 @@ const checkLogin= (req,res,next)=>{
 
 /* GET users listing. */
 
-router.get('/', function (req, res, next) {
+router.get('/',async function (req, res, next) {
 
   let user = req.session.user
-
+  let count = null
+  if(user){
+   count = await accountHelpers.getCartCount(user._id)
+  }
   productHelpers.productDisplay().then((products) => {
-    res.render('user/view-product', { title: 'E-Commerce', products,user });
+    res.render('user/view-product', { title: 'E-Commerce', products,user,count });
   });
 
 });
@@ -82,14 +85,14 @@ router.get('/logout',(req,res)=>{
 router.get('/add-to-cart/:id',checkLogin,(req,res)=>{
   let user = req.session.user
   accountHelpers.addtoCart(req.params.id,user._id).then((response)=>{
-    res.redirect('/')
+    res.json({status : true})
   })
 });
 
 router.get('/cart',checkLogin,async(req,res)=>{
+  let user = req.session.user
      let products = await accountHelpers.getCart(req.session.user._id)
-     console.log(products);
-     res.render('user/cart')
+     res.render('user/cart',{products,user})
 })
  
 
