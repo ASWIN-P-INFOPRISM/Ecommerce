@@ -3,6 +3,7 @@ var router = express.Router();
 var productHelpers = require('../helpers/product-helpers')
 var accountHelpers = require('../helpers/account-helpers');
 const { response } = require('express');
+const { resolve, reject } = require('promise');
 
 const checkLogin= (req,res,next)=>{
   if(req.session.loginStatus){
@@ -82,7 +83,7 @@ router.get('/logout',(req,res)=>{
 
 
 
-router.get('/add-to-cart/:id',checkLogin,(req,res)=>{
+router.get('/add-to-cart/:id',(req,res)=>{
   let user = req.session.user
   accountHelpers.addtoCart(req.params.id,user._id).then((response)=>{
     res.json({status : true})
@@ -93,6 +94,18 @@ router.get('/cart',checkLogin,async(req,res)=>{
   let user = req.session.user
      let products = await accountHelpers.getCart(req.session.user._id)
      res.render('user/cart',{products,user})
+});
+
+router.post('/change-quantity',(req,res)=>{
+  accountHelpers.changeQuantity(req.body).then((response)=>{
+    res.json(response)
+  })
+});
+
+router.post('/remove-product',(req,res)=>{
+  accountHelpers.removeProduct(req.body).then((response)=>{
+        res.json(response)
+  })
 })
  
 

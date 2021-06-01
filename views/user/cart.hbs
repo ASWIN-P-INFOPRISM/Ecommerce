@@ -1,5 +1,4 @@
 
-<h2 class="m-auto">Cart is empty</h2>
 
 
 <section>
@@ -17,16 +16,20 @@
                 <tbody>
                     {{#each products}}
                     <tr>
-                        
-                        <td><img style="width : 50px; height : 50px" src="/product-images/{{this.item}}.jpg" alt="image"></td>
+
+                        <td><img style="width : 50px; height : 50px" src="/product-images/{{this.item}}.jpg"
+                                alt="image"></td>
                         {{#each this.product}}
                         <td>{{this.name}}</td>
                         {{/each}}
                         <td>
-                            <button class="btn btn-secondary mr-3">-</button> {{this.quantity}} <button class="btn btn-secondary mr-3">+</button>
+                            <button class="btn btn-secondary mr-3"
+                                onclick="changeQuantity('{{this._id}}','{{this.item}}',-1)">-</button> <span id="{{this.item}}">{{this.quantity}}</span>
+                            <button class="btn btn-secondary mr-3"
+                                onclick="changeQuantity('{{this._id}}','{{this.item}}',1)">+</button>
                         </td>
                         <td>
-                             <a href="#" class="btn btn-danger" >Delete</a>
+                            <button class="btn btn-danger" onclick="removeProduct('{{this._id}}','{{this.item}}')">Remove</button>
                         </td>
                     </tr>
                     {{/each}}
