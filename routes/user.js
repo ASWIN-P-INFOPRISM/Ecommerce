@@ -93,11 +93,13 @@ router.get('/add-to-cart/:id',(req,res)=>{
 router.get('/cart',checkLogin,async(req,res)=>{
   let user = req.session.user
      let products = await accountHelpers.getCart(req.session.user._id)
-     res.render('user/cart',{products,user})
+     let total = await accountHelpers.placeOrder(req.session.user._id)
+     res.render('user/cart',{products,user,total})
 });
 
 router.post('/change-quantity',(req,res)=>{
-  accountHelpers.changeQuantity(req.body).then((response)=>{
+  accountHelpers.changeQuantity(req.body).then(async(response)=>{
+    response.total = await accountHelpers.placeOrder(req.body.userId)
     res.json(response)
   })
 });
@@ -106,6 +108,14 @@ router.post('/remove-product',(req,res)=>{
   accountHelpers.removeProduct(req.body).then((response)=>{
         res.json(response)
   })
+});
+
+router.get('/place-order',checkLogin,(req,res)=>{
+  let user = req.session.user
+  accountHelpers.placeOrder(user._id).then((total)=>{
+    res.render('user/checkout',{user,total})
+  })
+ 
 })
  
 

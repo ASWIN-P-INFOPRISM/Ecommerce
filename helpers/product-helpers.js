@@ -5,8 +5,9 @@ const { response } = require('express')
 
 module.exports={
     productHelp : (product,callback)=>{
+        product.price=parseInt(product.price)
         db.get().collection(collection.PRODUCT).insertOne(product).then((data)=>{
-            console.log(data)
+
             callback(data.ops[0]._id)
         })
     },
@@ -42,6 +43,7 @@ module.exports={
 
         editProduct : (id,content)=>{
                 return new Promise((resolve,reject)=>{
+                    content.price=parseInt(content.price)
                  db.get().collection(collection.PRODUCT).updateOne({_id : objectId(id)},{
                     $set : {
                         category : content.category,

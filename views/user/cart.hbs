@@ -2,13 +2,14 @@
 
 
 <section>
-    <div class="container mt-4">
+    <div class="container">
         <div class="row mt-3">
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Item</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Price</th>
                         <th scope="col">Quantity</th>
                         <th></th>
                     </tr>
@@ -21,12 +22,13 @@
                                 alt="image"></td>
                         {{#each this.product}}
                         <td>{{this.name}}</td>
+                        <td>Rs. {{this.price}}</td>
                         {{/each}}
                         <td>
                             <button class="btn btn-secondary mr-3"
-                                onclick="changeQuantity('{{this._id}}','{{this.item}}',-1)">-</button> <span id="{{this.item}}">{{this.quantity}}</span>
+                                onclick="changeQuantity('{{this._id}}','{{../user._id}}','{{this.item}}',-1)">-</button> <span id="{{this.item}}">{{this.quantity}}</span>
                             <button class="btn btn-secondary mr-3"
-                                onclick="changeQuantity('{{this._id}}','{{this.item}}',1)">+</button>
+                                onclick="changeQuantity('{{this._id}}','{{../user._id}}','{{this.item}}',1)">+</button>
                         </td>
                         <td>
                             <button class="btn btn-danger" onclick="removeProduct('{{this._id}}','{{this.item}}')">Remove</button>
@@ -37,4 +39,10 @@
             </table>
         </div>
     </div>
+     <div style="margin-left: 26cm;">
+            <h3>Total Rs. <span id="total">{{total}}</span></h3>
+        </div>
+        <div style="margin-left: 28cm;">
+            <a href="/place-order" class="btn btn-primary"><b>Place Order</b></a>
+        </div>
 </section>
