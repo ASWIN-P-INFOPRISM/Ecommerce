@@ -6,6 +6,7 @@
                     <h2>Enter Delivery Details</h2>
                     <br>
                     <div>
+                        <input type="text" name="userId" value="{{user._id}}" hidden>
                         <label for="">Address</label>
                         <input class="form-control" type="text" id="address" name="address">
 
@@ -23,12 +24,12 @@
                         <div class="payment">
                             <p><b>Payment Method</b></p>
                             <label for="" class="radio-inline">
-                                <input type="radio" name="payment-method" value="COD" checked> COD
+                                <input type="radio" name="paymentMethod" value="COD" checked> COD
                             </label><br>
                             <label for="" class="radio-inline">
-                                <input type="radio" name="payment-method" value="ONLINE"> Online Payment
+                                <input type="radio" name="paymentMethod" value="ONLINE"> Online Payment
                             </label><br><br>
-                            <a href="" class="btn btn-primary"><b>checkout</b></a>
+                            <button class="btn btn-primary" type="submit"><b>Checkout</b></button>
 
                         </div>
                     </div>
@@ -38,3 +39,22 @@
     </form>
     </div>
 </section>
+
+<script>
+     $("#checkout-form").submit((e)=>{
+            e.preventDefault();
+            $.ajax({
+                url : '/place-order',
+                method : 'post',
+                data : $('#checkout-form').serialize(),
+                success : (response)=>{
+                    alert('Order Successfully Placed!!!')
+                    if(response.status){
+                         location.href = '/order-success'
+                    }
+                   
+                   
+                }
+            })
+        })
+</script>

@@ -55,3 +55,4 @@ function removeProduct(cartId,productId){
         }
     })
 }
+    

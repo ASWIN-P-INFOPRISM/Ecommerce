@@ -212,5 +212,80 @@ module.exports={
              resolve(total[0].total);
 
         })
+    },
+
+    getCartProductList : (userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart = await db.get().collection(collection.CART_USER).findOne({user : objectId(userId)})
+            resolve(cart.products)
+        })
+    },
+
+    orderPlaced : (order,products,total)=>{
+        return new Promise((resolve,reject)=>{
+            let status = (order.paymentMethod==='COD')?'placed':'pending'
+            let orderDetails = { 
+                user : order.userId,
+                deliveryDetails : {
+                    address : order.address,
+                    pincode : order.pincode,
+                    mobile : order.mobile
+                },
+                paymentMethod : order.paymentMethod,
+                status : status,
+                products : products,
+                totalAmount : total,
+                date : new Date()
+            }
+            db.get().collection(collection.ORDER).insertOne(orderDetails).then(async(response)=>{
+                await db.get().collection(collection.CART_USER).removeOne({user : objectId(order.userId)})
+                resolve()
+            })
+        })
+    },
+
+    yourOrders : (userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER).find().toArray().then((response)=>{
+                resolve(response)
+            })
+        })
+       
+    },
+
+    yourOrderProducts : (orderId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let products =await db.get().collection(collection.ORDER).aggregate([
+                {
+                 $match : {_id : objectId(orderId)}
+                },
+                {
+                    $unwind : '$products'
+                    
+                },
+                {
+                    $project : {
+                        item : '$products.item',
+                        quantity: '$products.quantity'
+                    }
+                },
+                {
+                   $lookup : {
+                       from : collection.PRODUCT,
+                       localField : 'item',
+                       foreignField :'_id',
+                       as : 'product'
+                   }
+                },
+               
+                {
+                    $project : {
+                        item : 1, quantity: 1, product :{$arrayElemAt:['$product',0]}
+                    }
+                }
+            ]).toArray()
+            resolve(products)
+    })
     }
+
 }
