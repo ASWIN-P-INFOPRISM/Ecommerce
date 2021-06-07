@@ -48,13 +48,71 @@
                 method : 'post',
                 data : $('#checkout-form').serialize(),
                 success : (response)=>{
-                    alert('Order Successfully Placed!!!')
-                    if(response.status){
+                    if(response.codsuccess){
+                        alert('Order Placed Successfully!!!')
                          location.href = '/order-success'
                     }
-                   
-                   
+                    else{
+                       
+                        getPayment(response)
+                    }
                 }
             })
         })
+
+        function getPayment(order){
+            var options = {
+    "key": "rzp_test_HDw3ty4YmGJaLM", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "INfo Prism",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+       
+        paymentDetails(response,order);
+    },
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9999999999"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert('Payment Failed!!!');
+        location.reload()
+});
+rzp1.open();
+}
+
+function paymentDetails(response,order){
+    $.ajax({
+        url : '/payment-success',
+        data : {
+            response,
+            order
+        },
+        method : 'post',
+        success : (response)=>{
+            if(response.status){
+                 alert('Order Placed Successfully!!!')
+                 location.href = '/order-success'
+            }
+            else{
+                alert('payment Failed!!!')
+                location.href= '/'
+            }
+        }
+    })
+}
+
 </script>

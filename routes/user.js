@@ -93,9 +93,20 @@ router.get('/add-to-cart/:id',(req,res)=>{
 router.get('/cart',checkLogin,async(req,res)=>{
   let user = req.session.user
      let products = await accountHelpers.getCart(req.session.user._id)
-     let total = await accountHelpers.placeOrder(req.session.user._id)
-     res.render('user/cart',{products,user,total})
+     console.log(products);
+     if(products===[]){
+      res.render('user/emptycart',{user})     
+     }
+     else{
+      let total = await accountHelpers.placeOrder(req.session.user._id)
+      res.render('user/cart',{products,user,total})
+     }
+    
 });
+
+router.get('/view-product',checkLogin,(req,res)=>{
+  res.redirect('/')
+})
 
 router.post('/change-quantity',(req,res)=>{
   accountHelpers.changeQuantity(req.body).then(async(response)=>{
@@ -121,10 +132,30 @@ router.get('/place-order',checkLogin,(req,res)=>{
 router.post('/place-order',checkLogin,async(req,res)=>{
   let products = await accountHelpers.getCartProductList(req.body.userId)
   let total = await accountHelpers.placeOrder(req.body.userId)
-  accountHelpers.orderPlaced(req.body,products,total).then((response)=>{
-    res.json({status : true})
+  accountHelpers.orderPlaced(req.body,products,total).then((orderId)=>{
+    if(req.body.paymentMethod === 'COD'){
+      res.json({codsuccess : true})
+    }
+    else{
+      accountHelpers.getRazorpay(orderId,total).then((order)=>{
+        res.json(order);
+      })
+    }
+   
 })
 });
+
+router.post('/payment-success',(req,res)=>{
+      accountHelpers.verifyPayment(req.body).then(()=>{
+        console.log(req.body['order[receipt]']);
+        accountHelpers.changePaymentStatus(req.body['order[receipt]']).then(()=>{
+          res.json({status : true})
+        })
+      }).catch((err)=>{
+        console.log(err);
+        res.json({status : false})
+      })
+})
 
 router.get('/order-success',checkLogin,async(req,res)=>{
   let order = await accountHelpers.yourOrders(req.session.user._id)
