@@ -47,6 +47,15 @@ module.exports={
 
     },
 
+    allUsers : ()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_DATA).find().toArray().then((users)=>{
+                resolve(users)
+            })    
+        })
+        
+    },
+
     addtoCart : (productId,userId)=>{
         let productObj = {
             item : objectId(productId),

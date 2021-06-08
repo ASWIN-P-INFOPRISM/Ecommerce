@@ -1,0 +1,53 @@
+<section>
+    <div class="container mt-4">
+        <div class="row mt-3">
+            <table class="table" id="orderTable">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col" colspan="3"><center>Delivery Details</center></th>
+                        <th scope="col">Payment Method</th>
+                        <th scope="col">Order Status</th>
+                        <th scope="col">Total</th>
+                        <th scope="col" colspan="2"><center>Options</center></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                      <th></th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Pincode</th>
+                        <th scope="col">Mobile</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        
+                    </tr>
+                    </thead>
+                     <tbody>
+                    {{#each orders}}
+                    <tr>
+                          <td scope="row">{{this.date}}</th>
+                          <td>{{this.deliveryDetails.address}}</td>
+                          <td>{{this.deliveryDetails.pincode}}</td>
+                          <td>{{this.deliveryDetails.mobile}}</td>
+                          <td>{{this.paymentMethod}}</td>
+                        <td>{{this.status}}</td>
+                        <td>{{this.totalAmount}}</td>
+                        <td><a href="#" class="btn btn-primary">Ship</a></td>
+                        <td><a href="#" class="btn btn-danger">Cancel</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready( function () {
+    $('#orderTable').DataTable();
+} );
+</script>

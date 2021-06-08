@@ -96,11 +96,11 @@ router.get('/cart',checkLogin,async(req,res)=>{
      let products = await accountHelpers.getCart(req.session.user._id)
       let total = 0
      console.log(products);
-     if(total===0){
+     if(products==[]){
       res.render('user/emptycart',{user})     
      }
      else{
-       total = await accountHelpers.placeOrder(req.session.user._id)
+      let total = await accountHelpers.placeOrder(req.session.user._id)
       res.render('user/cart',{products,user,total})
      }
     

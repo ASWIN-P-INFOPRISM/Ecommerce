@@ -97,5 +97,13 @@ module.exports={
                 })
 
             })
+        },
+
+        allOrders : ()=>{
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.ORDER).find().toArray().then((orders)=>{
+                    resolve(orders)
+                })
+            })
         }
     }

@@ -3,6 +3,7 @@ var express = require('express');
 
 var router = express.Router();
 var productHelpers= require('../helpers/product-helpers')
+var accountHelpers = require('../helpers/account-helpers')
 /* GET home page. */
 const checkLogin= (req,res,next)=>{
   if(req.session.adminloginStatus){
@@ -19,6 +20,21 @@ router.get('/view-product', checkLogin,function (req, res, next) {
     let adminLogin = req.session.admin
     res.render('admin/view-product', { title: 'E-Commerce', adminLogin,products, admin : true });
   });
+});
+
+router.get('/all-orders',checkLogin,(req,res)=>{
+  let adminLogin = req.session.admin
+    productHelpers.allOrders().then((orders)=>{
+      res.render('admin/allorders',{adminLogin,orders,admin : true})
+    })
+});
+
+
+router.get('/all-users',checkLogin,(req,res)=>{
+  let adminLogin = req.session.admin
+  accountHelpers.allUsers().then((users)=>{
+    res.render('admin/allusers',{adminLogin,users,admin : true})
+  })
 });
 
 router.get('/', (req, res) => {
