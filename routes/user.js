@@ -6,7 +6,7 @@ const { response } = require('express');
 const { resolve, reject } = require('promise');
 
 const checkLogin= (req,res,next)=>{
-  if(req.session.loginStatus){
+  if(req.session.userloginStatus){
     next()
   }
   else{
@@ -20,7 +20,7 @@ router.get('/',async function (req, res, next) {
 
   let user = req.session.user
   let count = null
-  if(user){
+  if(user){ 
    count = await accountHelpers.getCartCount(user._id)
   }
   productHelpers.productDisplay().then((products) => {
@@ -46,13 +46,13 @@ router.post('/signup', (req, res) => {
 
 
 router.get('/login', (req, res) => {
-  if(req.session.loginStatus){
+  if(req.session.userloginStatus){
     res.redirect('/')
   }
   else{
-    let loginError = req.session.loginError
+    let loginError = req.session.userloginError
     res.render('user/login',{ loginError});
-    req.session.loginError=false
+    req.session.userloginError=false
     
   }
 
@@ -63,13 +63,13 @@ router.post('/login', (req, res) => {
 
   accountHelpers.ofLogin(req.body).then((response) => {
     if (response) {
-      req.session.loginStatus= true
+      req.session.userloginStatus= true
       req.session.user = response.user
       res.redirect('/')
     }
     else{
-      req.session.loginStatus= false 
-      req.session.loginError= "*Invalid Username or Password"
+      req.session.userloginStatus= false 
+      req.session.userloginError= "*Invalid Username or Password"
       res.redirect('/login')
     }
   })
@@ -77,8 +77,9 @@ router.post('/login', (req, res) => {
 
 
 router.get('/logout',(req,res)=>{
-  req.session.destroy()
-  res.redirect('/')
+  req.session.userloginStatus=false
+  req.session.user=null
+  res.redirect('/') 
 });
 
 
@@ -93,12 +94,13 @@ router.get('/add-to-cart/:id',(req,res)=>{
 router.get('/cart',checkLogin,async(req,res)=>{
   let user = req.session.user
      let products = await accountHelpers.getCart(req.session.user._id)
+      let total = 0
      console.log(products);
-     if(products===[]){
+     if(total===0){
       res.render('user/emptycart',{user})     
      }
      else{
-      let total = await accountHelpers.placeOrder(req.session.user._id)
+       total = await accountHelpers.placeOrder(req.session.user._id)
       res.render('user/cart',{products,user,total})
      }
     

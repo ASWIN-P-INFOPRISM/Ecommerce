@@ -10,16 +10,27 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin">All Products</a>
+                        <a class="nav-link active" aria-current="page" href="/admin/view-product">All Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="admin/add-product">Add Products</a>
+                        <a class="nav-link active" href="/admin/add-product">Add Products</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                {{#if adminLogin}}
+             <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{#if adminLogin}}
+                        {{adminLogin.name}}
+                        {{/if}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        {{#if adminLogin}}
+                        <li><a class="dropdown-item" href="/admin/logout">Logout</a></li>
+                        {{/if}}
+                    </ul>
+                </div>
+                {{/if}}
             </div>
         </div>
     </nav>

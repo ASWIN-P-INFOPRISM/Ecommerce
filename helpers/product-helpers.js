@@ -1,9 +1,50 @@
 var db = require('../config/connection')
 const objectId = require('mongodb').ObjectId
+const bcrypt = require('bcrypt')
 var collection=require('../config/collection-names')
 const { response } = require('express')
 
 module.exports={
+
+    ofLogin : (details)=>{
+        return new Promise(async(resolve,reject)=>{
+            let response = {}
+            let admin= await db.get().collection(collection.ADMIN_DATA).findOne({email : details.email})
+            if(admin){
+                bcrypt.compare(details.password,admin.password).then((status)=>{
+                    if(status){
+                        console.log('LOGINED ');
+                        console.log( status);
+                        response.admin=admin;
+                        response.adminloginStatus=true
+                        resolve(response)
+                    }
+                    else{
+                        console.log('LOGIN UNSUCCESSFULL');
+                        console.log( status);
+                        resolve(response.adminloginStatus=false)
+                    }
+                })
+            }
+            else{
+                console.log('LOGIN UNSUCCESSFULL');
+                resolve(response.adminloginStatus=false)
+            }
+        })
+
+    },
+
+    ofSignup :(details)=>{
+        return new Promise(async(resolve,reject)=>{
+            details.password = await bcrypt.hash(details.password,10)
+            db.get().collection(collection.ADMIN_DATA).insertOne(details).then((data)=>{
+                
+                resolve(data.ops[0])
+
+            })
+        })
+    },
+
     productHelp : (product,callback)=>{
         product.price=parseInt(product.price)
         db.get().collection(collection.PRODUCT).insertOne(product).then((data)=>{
