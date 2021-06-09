@@ -22,16 +22,22 @@ router.get('/',async function (req, res, next) {
   let count = null
   if(user){ 
    count = await accountHelpers.getCartCount(user._id)
-  }
-  productHelpers.productDisplay().then((products) => {
-    res.render('user/view-product', { title: 'E-Commerce', products,user,count });
+   productHelpers.productDisplay().then((products) => {
+    res.render('user/view-product', { title: user.name, products,user,count });
   });
+  }
+  else{
+    productHelpers.productDisplay().then((products) => {
+      res.render('user/view-product', { title: 'E-Commerce', products});
+    });
+  }
+  
 
 });
 
 
 router.get('/signup', (req, res) => {
-  res.render('user/signup');
+  res.render('user/signup',{title: 'Sign Up'});
 });
 
 
@@ -51,7 +57,7 @@ router.get('/login', (req, res) => {
   }
   else{
     let loginError = req.session.userloginError
-    res.render('user/login',{ loginError});
+    res.render('user/login',{ loginError,title: 'Login'});
     req.session.userloginError=false
     
   }
@@ -87,7 +93,8 @@ router.get('/logout',(req,res)=>{
 router.get('/add-to-cart/:id',(req,res)=>{
   let user = req.session.user
   accountHelpers.addtoCart(req.params.id,user._id).then((response)=>{
-    res.json({status : true})
+    console.log(response);
+    res.json(response)
   })
 });
 
@@ -96,12 +103,13 @@ router.get('/cart',checkLogin,async(req,res)=>{
      let products = await accountHelpers.getCart(req.session.user._id)
       let total = 0
      console.log(products);
-     if(products==[]){
-      res.render('user/emptycart',{user})     
+     if(products.length>0){
+      let total = await accountHelpers.placeOrder(req.session.user._id)
+      res.render('user/cart',{products,user,total,title:"Your Cart"})
+           
      }
      else{
-      let total = await accountHelpers.placeOrder(req.session.user._id)
-      res.render('user/cart',{products,user,total})
+      res.render('user/emptycart',{user,title:"Your Cart"})
      }
     
 });
@@ -126,7 +134,7 @@ router.post('/remove-product',(req,res)=>{
 router.get('/place-order',checkLogin,(req,res)=>{
   let user = req.session.user
   accountHelpers.placeOrder(user._id).then((total)=>{
-    res.render('user/checkout',{user,total})
+    res.render('user/checkout',{user,total,title : "Checkout"})
   })
  
 });
@@ -161,12 +169,12 @@ router.post('/payment-success',(req,res)=>{
 
 router.get('/order-success',checkLogin,async(req,res)=>{
   let order = await accountHelpers.yourOrders(req.session.user._id)
-  res.render('user/orders',{user : req.session.user,order});
+  res.render('user/orders',{user : req.session.user,order,title : "Your Orders"});
 });
 
 router.get('/view-your-products/:id',checkLogin,async(req,res)=>{
   let products = await accountHelpers.yourOrderProducts(req.params.id)
-  res.render('user/yourProducts',{user : req.session.user,products})
+  res.render('user/yourProducts',{user : req.session.user,products,title : "Your Orders"})
 })
  
 

@@ -71,7 +71,10 @@ module.exports={
 
                     $inc : {'products.$.quantity':1}
 
-                }).then((response)=>{
+                }).then(()=>{
+                    let response ={
+                        value : "update"
+                    }
                     resolve(response)
                 })
             }
@@ -82,7 +85,10 @@ module.exports={
                         products : productObj
                     } 
 
-                }).then((response)=>{
+                }).then(()=>{
+                    let response ={
+                        value : "1"
+                    }
                     resolve(response)
                 })
             }
@@ -92,7 +98,10 @@ module.exports={
                     user : objectId(userId),
                     products : [productObj]
                 }
-                db.get().collection(collection.CART_USER).insertOne(userCart).then((response)=>{
+                db.get().collection(collection.CART_USER).insertOne(userCart).then(()=>{
+                    let response ={
+                        value : "1"
+                    }
                     resolve(response)
                 })
             }
@@ -141,8 +150,11 @@ module.exports={
         return new Promise(async(resolve,reject)=>{
             let count = 0
             let cart = await db.get().collection(collection.CART_USER).findOne({user : objectId(userId)})
+            
             if(cart){
+                
                 count= cart.products.length
+                
             }
             resolve(count)
         })
