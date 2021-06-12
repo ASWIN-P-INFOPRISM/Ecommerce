@@ -22,12 +22,6 @@ router.get('/view-product', checkLogin,function (req, res, next) {
   });
 });
 
-router.get('/all-orders',checkLogin,(req,res)=>{
-  let adminLogin = req.session.admin
-    productHelpers.allOrders().then((orders)=>{
-      res.render('admin/allorders',{adminLogin,orders,admin : true})
-    })
-});
 
 
 router.get('/all-users',checkLogin,(req,res)=>{
@@ -86,8 +80,8 @@ router.get('/logout',(req,res)=>{
 });
 
 router.get('/add-product',checkLogin,(req,res)=>{
-
-  res.render('admin/add-product',{admin : true})
+  let adminLogin = req.session.admin
+  res.render('admin/add-product',{admin : true,adminLogin})
 }); 
 
 router.post('/add-product',checkLogin,(req,res)=>{
@@ -122,6 +116,34 @@ router.post('/edit/:id',(req,res)=>{
     img.mv('./public/product-images/'+req.params.id+'.jpg')
     }
     
+  })
+});
+
+router.post('/shipping',checkLogin,(req,res)=>{
+  console.log(req.body.orderId);
+  productHelpers.shipping(req.body.orderId).then((status)=>{
+      res.json(status)
+  })
+});
+
+router.get('/view-ordered-products-admin/:id',checkLogin,(req,res)=>{
+  let adminLogin = req.session.admin
+  accountHelpers.yourOrderProducts(req.params.id).then((products)=>{
+    res.render('admin/view-ordered-products-admin',{products, admin : true,adminLogin})
+  })
+});
+
+router.get('/view-user-orders/:id',checkLogin,(req,res)=>{
+  let adminLogin = req.session.admin
+  console.log(req.params.id);
+  productHelpers.allUserOrders(req.params.id).then((orders)=>{
+    res.render('admin/orders-of-users',{orders, admin : true,adminLogin})
+  })
+})
+
+router.get('/cancel/:id',checkLogin,(req,res)=>{
+  productHelpers.cancelOrder(req.params.id).then(()=>{
+      res.json({status : true})
   })
 })
 

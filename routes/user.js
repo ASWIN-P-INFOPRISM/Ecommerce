@@ -175,6 +175,12 @@ router.get('/order-success',checkLogin,async(req,res)=>{
 router.get('/view-your-products/:id',checkLogin,async(req,res)=>{
   let products = await accountHelpers.yourOrderProducts(req.params.id)
   res.render('user/yourProducts',{user : req.session.user,products,title : "Your Orders"})
+});
+
+router.get('/cancel/:id',checkLogin,(req,res)=>{
+  productHelpers.cancelOrder(req.params.id).then(()=>{
+      res.json({status : true})
+  })
 })
  
 

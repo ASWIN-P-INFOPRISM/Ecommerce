@@ -1,3 +1,5 @@
+const { response } = require("express")
+
 
 
 
@@ -59,3 +61,36 @@ function removeProduct(cartId,productId){
     })
 }
     
+function shipping(orderId){
+        $.ajax({
+            url : '/admin/shipping',
+            data : {
+                orderId : orderId
+            },
+            method : 'post',
+            success : (status)=>{
+
+                alert('Shipped!!!')
+                location.reload()
+                document.getElementById('status').innerHTML = status
+            }
+        })
+}
+
+function Cancel(orderId){
+    $.ajax({
+        url : '/admin/cancel/'+orderId,
+        success : (status)=>{
+            location.reload()
+        }
+    })
+}
+
+function userCancel(orderId){
+    $.ajax({
+        url : '/cancel/'+orderId,
+        success : (status)=>{
+            location.reload()
+        }
+    })
+}

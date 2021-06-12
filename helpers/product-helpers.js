@@ -99,10 +99,41 @@ module.exports={
             })
         },
 
-        allOrders : ()=>{
+        allUserOrders : (userId)=>{
             return new Promise((resolve,reject)=>{
-                db.get().collection(collection.ORDER).find().toArray().then((orders)=>{
+                db.get().collection(collection.ORDER).find({user : userId}).toArray().then((orders)=>{
                     resolve(orders)
+                })
+            })
+        },
+
+        shipping : (orderId)=>{
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.ORDER).updateOne({_id : objectId(orderId)},
+                {
+                    $set : {
+                        status : 'Shipped',
+                        shippment : true
+                    }
+                }).then(()=>{
+                    db.get().collection(collection.ORDER).findOne({_id : objectId(orderId)}).then((response)=>{
+                        resolve(response.status)
+                    })
+                })
+            })
+        },
+
+        cancelOrder : (orderId)=>{
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.ORDER).updateOne({_id : objectId(orderId)},
+                {
+                    $set : {
+                        status : 'Cancelled',
+                        shippment : true,
+                        cancelled : true
+                    }
+                }).then(()=>{
+                    resolve()
                 })
             })
         }

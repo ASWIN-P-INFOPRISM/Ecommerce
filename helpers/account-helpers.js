@@ -271,7 +271,7 @@ module.exports={
 
     yourOrders : (userId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.ORDER).find().toArray().then((response)=>{
+            db.get().collection(collection.ORDER).find({user : userId}).toArray().then((response)=>{
                 resolve(response)
             })
         })

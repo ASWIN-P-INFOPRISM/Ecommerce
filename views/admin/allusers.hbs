@@ -6,6 +6,7 @@
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Email ID</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -13,6 +14,7 @@
                     <tr>
                         <th scope="row">{{this.name}}</th>
                         <td>{{this.email}}</td>
+                        <td><a class="btn btn-warning" href="/admin/view-user-orders/{{this._id}}" style="width: 3cm;">View Orders</a></td>
                     </tr>
                     {{/each}}
                 </tbody>
