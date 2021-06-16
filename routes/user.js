@@ -181,6 +181,23 @@ router.get('/cancel/:id',checkLogin,(req,res)=>{
   productHelpers.cancelOrder(req.params.id).then(()=>{
       res.json({status : true})
   })
+}) 
+
+router.get('/your-profile',checkLogin,(req,res)=>{
+  let user = req.session.user;
+  accountHelpers.getUserData(user._id).then((userData)=>{
+    
+    res.render('user/your-profile',{user,userData,title : "Your Profile"})
+  })
+});
+
+router.post('/your-profile',(req,res)=>{
+  console.log(req.body);
+  accountHelpers.editProfile(req.body).then(()=>{
+    res.redirect('/')
+  })
+  console.log(req.body);
+
 })
  
 

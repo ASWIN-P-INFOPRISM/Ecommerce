@@ -1,0 +1,95 @@
+{{#each userData}}
+<div class="container rounded bg-white mt-5 mb-5">
+
+        <div class="row">
+                <div class="col-md-3 border-right">
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img
+                                        class="rounded-circle mt-5" width="150px"
+                                        src="/product-images/profilepic.jpg"><span
+                                        class="font-weight-bold">{{this.name}}</span><span
+                                        class="text-black-50">{{this.email}}</span><span>
+                                </span></div>
+                </div>
+                <div class="col-md-5 border-right">
+                        <div class="p-3 py-5">
+                                <form action="/your-profile" method="post">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <h4 class="text-right">Profile Settings</h4>
+                                        </div>
+                                        <div class="row mt-2">
+                                                <div class="col-md-12"><label class="labels">Name</label><input
+                                                                type="text" class="form-control"
+                                                                placeholder="first name" name="name" value="{{this.name}}" readonly>
+                                                </div>
+                                                {{/each}}
+                                               
+                                                <input type="text" class="form-control" name="userId"
+                                                        value="{{user._id}}" hidden>
+                                        </div>
+                                         {{#each userData}}
+                                        <div class="row mt-3">
+                                                <div class="col-md-12"><label class="labels">Mobile Number</label><input
+                                                                type="number" class="form-control"
+                                                                placeholder="Mobile Number" name="mobile" value="{{this.mobile}}">
+                                                </div>
+                                                <div class="col-md-12"><label class="labels">Address Line
+                                                                1</label><input type="text" class="form-control"
+                                                                placeholder="Address line 1" name="address1"
+                                                                value="{{this.address.address1}}"></div>
+                                                <div class="col-md-12"><label class="labels">Address Line
+                                                                2</label><input type="text" class="form-control"
+                                                                placeholder="Address line 2" name="address2"
+                                                                value="{{this.address.address2}}"></div>
+                                                <div class="col-md-12"><label class="labels">Pincode</label><input
+                                                                type="number" class="form-control" placeholder="Pincode"
+                                                                name="pincode" value="{{this.address.pincode}}"></div>
+                                                <div class="col-md-12"><label class="labels">Area</label><input
+                                                                type="text" class="form-control" placeholder="Area"
+                                                                name="area" value="{{this.address.area}}"></div>
+                                                <div class="col-md-12"><label class="labels">Email ID</label><input
+                                                                type="text" class="form-control"
+                                                                placeholder="Email Id" name="Email ID" value="{{this.email}}"
+                                                                readonly></div>
+
+                                        </div>
+                                        <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                        {{!-- <label class="labels">Country</label><input type="text"
+                                                                class="form-control" placeholder="country"
+                                                                name="Country" value=""> --}}
+                                                        <label class="labels control-label">Country</label>
+
+                                                        <select class="form-select" name="country">
+                                                                <option selected="{{this.address.country}}">Select Country</option>
+                                                                <option value="India">India</option>
+                                                                <option value="Canada">Canada</option>
+                                                                <option value="Denmark">Denmark</option>
+                                                                <option value="Estonia">Estonia</option>
+                                                                <option value="France">France</option>
+                                                        </select>
+
+                                                        {{!-- <select class="form-control">
+                                                                <option selected="Select Country">Select country
+                                                                </option>
+                                                                <option>India</option>
+                                                                <option>Canada</option>
+                                                                <option>Denmark</option>
+                                                                <option>Estonia</option>
+                                                                <option>France</option>
+                                                        </select> --}}
+                                                </div>
+                                                <div class="col-md-6"><label class="labels">State</label><input
+                                                                type="text" class="form-control" name="state" value="{{this.address.state}}"
+                                                                placeholder="State"></div>
+                                        </div>
+                                        <div class="mt-5 text-center"><button class="btn btn-primary profile-button"
+                                                        type="submit">Save
+                                                        Profile</button>
+                                        </div>
+                                </form>
+                        </div>
+                </div>
+        </div>
+</div>
+</div>
+{{/each}}

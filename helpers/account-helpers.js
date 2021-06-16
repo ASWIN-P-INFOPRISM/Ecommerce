@@ -358,6 +358,38 @@ module.exports={
         })
         })
         
+    },
+
+    editProfile : (data)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_DATA).updateOne({_id : objectId(data.userId)},
+            {
+               $set : {
+                   mobile : data.mobile,
+                    address :{  address1 : data.address1,
+                                address2 : data.address2,
+                                pincode : data.pincode,
+                                area : data.area,
+                                country : data.country,
+                                state : data.state
+
+                            }
+                    
+               } 
+            }).then(()=>{
+               resolve()
+            })
+        })
+       
+    },
+
+    getUserData : (userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_DATA).find({_id : objectId(userId)}).toArray().then((response)=>{
+                resolve(response)
+            })
+        })
+       
     }
 
 }
